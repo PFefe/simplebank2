@@ -1,19 +1,26 @@
 package db
 
 import (
+	//"bytes"
 	"context"
 	"database/sql"
+	//"encoding/json"
+	//"io/util"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/require"
+	//db "github.com/techschool/simplebank/db/sqlc"
 	"github.com/techschool/simplebank/util"
 )
 
 
 func createRandomAccount (t *testing.T) Accounts {
+
+	user := createRandomUser(t)
+
 	arg :=  CreateAccountParams {
-		Owner: util.RandomOwner(), //randomly generated?
+		Owner: user.Username, //randomly generated?
 		Balance: util.RandomMoney(),
 		Currency: util.RandomCurrency(),
 	}
