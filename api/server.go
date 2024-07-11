@@ -8,20 +8,22 @@ import (
 )
 
 type Server struct {
-	store db.Store
+	store  db.Store
 	router *gin.Engine
-
 }
 
-func NewServer (store db.Store) *Server {
+func NewServer(store db.Store) *Server {
 	server := &Server{store: store}
 	router := gin.Default()
 
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
-		v.RegisterValidation("currency",validCurrency)
+		v.RegisterValidation("currency", validCurrency)
 	}
-	router.POST("/accounts",server.createAccount)
-	router.GET("/accounts/:id",server.getAccount)
+
+	router.POST("/users", server.createUser)
+
+	router.POST("/accounts", server.createAccount)
+	router.GET("/accounts/:id", server.getAccount)
 	router.GET("/accounts", server.listAccount)
 
 	router.POST("/transfers", server.createTransfer)
@@ -30,12 +32,10 @@ func NewServer (store db.Store) *Server {
 	return server
 }
 
-func (server *Server) Start (address string) error {
+func (server *Server) Start(address string) error {
 	return server.router.Run(address)
 }
 
-
-
-func errorResponse (err error) gin.H {
+func errorResponse(err error) gin.H {
 	return gin.H{"error": err.Error()}
 }
